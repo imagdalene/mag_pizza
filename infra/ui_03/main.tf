@@ -54,8 +54,9 @@ resource "aws_s3_bucket_policy" "uibucketPolicy" {
 }
 
 resource "aws_cloudfront_distribution" "UiDist" {
-  aliases = var.Aliases
-  enabled = true
+  aliases             = var.Aliases
+  enabled             = true
+  default_root_object = "index.html"
   depends_on = [
     aws_s3_bucket.uibucket
   ]
@@ -110,7 +111,7 @@ resource "aws_cloudfront_distribution" "UiDist" {
 }
 
 resource "aws_route53_record" "Route53A" {
-  name    = "ui.${var.ZoneName}"
+  name    = var.ZoneName
   type    = "A"
   zone_id = data.aws_route53_zone.selected.zone_id
   alias {

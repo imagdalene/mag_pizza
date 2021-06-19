@@ -1,11 +1,11 @@
 variable "CertArn" {
   type    = string
-  default = "arn:aws:acm:us-east-1:386145569507:certificate/395ded6a-39c0-4dde-abd8-19fc64e3c756"
+  default = "arn:aws:acm:us-east-1:386145569507:certificate/a4773cc7-c0d9-44fe-8612-ed55ff9476dd"
 }
 
 variable "Aliases" {
   type    = list(string)
-  default = ["ui.amazingprimes.com"]
+  default = ["amazingprimes.com"]
 }
 
 variable "ZoneName" {
