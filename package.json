@@ -1,0 +1,21 @@
+{
+  "name": "mag_pizza",
+  "version": "1.0.0",
+  "description": "Demo Pizza store with Infra as Code, Open Policy Agent, ECS Fargate",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Open",
+    "Policy",
+    "Agent",
+    "ECS",
+    "Fargate",
+    "Infrastructure",
+    "as",
+    "Code"
+  ],
+  "author": "Magdalene Lee",
+  "license": "ISC"
+}
