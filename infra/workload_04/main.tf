@@ -40,7 +40,7 @@ data "terraform_remote_state" "albs" {
 }
 
 # BE Task Definition
-resource "aws_ecs_task_definition" "ECSTaskDefinition" {
+resource "aws_ecs_task_definition" "BEECSTaskDefinition" {
   family                   = var.BEServiceName
   cpu                      = var.ContainerCpu
   memory                   = var.ContainerMemory
@@ -90,5 +90,36 @@ resource "aws_ecs_task_definition" "ECSTaskDefinition" {
 
     }
   ])
+
+}
+
+resource "aws_ecs_service" "BEService" {
+  name                              = var.BEServiceName
+  cluster                           = data.terraform_remote_state.base.outputs.ECSClusterID
+  desired_count                     = var.DesiredCount
+  enable_ecs_managed_tags           = true
+  deployment_maximum_percent        = 150
+  health_check_grace_period_seconds = 30
+  launch_type                       = "FARGATE"
+
+  load_balancer {
+    container_name   = var.BEServiceName
+    container_port   = var.ContainerPort
+    target_group_arn = data.terraform_remote_state.albs.outputs.BETargetGroup
+  }
+
+  network_configuration {
+    assign_public_ip = false
+    subnets = [
+      data.terraform_remote_state.base.outputs.PteSn1,
+      data.terraform_remote_state.base.outputs.PteSn2
+    ]
+    security_groups = [
+      data.terraform_remote_state.albs.outputs.BEWorkloadSG
+    ]
+  }
+
+  platform_version = "1.4.0"
+  task_definition  = aws_ecs_task_definition.BEECSTaskDefinition.arn
 
 }
