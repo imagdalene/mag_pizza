@@ -202,30 +202,30 @@ output "VpcId" {
 
 output "PublicSn1" {
   description = "Public Subnet 1"
-  value       = aws_subnet.PubSn1
+  value       = aws_subnet.PubSn1.id
 }
 
 output "PublicSn2" {
   description = "Public Subnet 2"
-  value       = aws_subnet.PubSn2
+  value       = aws_subnet.PubSn2.id
 }
 
 output "PteSn1" {
   description = "Pte Subnet 1"
-  value       = aws_subnet.PteSn1
+  value       = aws_subnet.PteSn1.id
 }
 
 output "PteSn2" {
   description = "Pte Subnet 2"
-  value       = aws_subnet.PteSn2
+  value       = aws_subnet.PteSn2.id
 }
 
 output "DataSn1" {
   description = "Pte Subnet 1"
-  value       = aws_subnet.DataSn1
+  value       = aws_subnet.DataSn1.id
 }
 
 output "DataSn2" {
   description = "Pte Subnet 2"
-  value       = aws_subnet.DataSn2
+  value       = aws_subnet.DataSn2.id
 }

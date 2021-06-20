@@ -32,7 +32,7 @@ resource "aws_dynamodb_table" "User" {
 }
 
 resource "aws_dynamodb_table" "Session" {
-  name           = "User"
+  name           = "Session"
   billing_mode   = "PROVISIONED"
   read_capacity  = 20
   write_capacity = 20
@@ -73,4 +73,24 @@ resource "aws_dynamodb_table" "Orders" {
     name = "orderid"
     type = "S"
   }
+}
+
+output "UserTableArn" {
+  description = "UserTable Arn"
+  value       = aws_dynamodb_table.User.arn
+}
+
+output "SessionTableArn" {
+  description = "SessionTable Arn"
+  value       = aws_dynamodb_table.Session.arn
+}
+
+output "MenuTableArn" {
+  description = "MenuTable Arn"
+  value       = aws_dynamodb_table.Menu.arn
+}
+
+output "OrdersTableArn" {
+  description = "OrdersTable Arn"
+  value       = aws_dynamodb_table.Orders.arn
 }
