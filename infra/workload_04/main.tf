@@ -40,3 +40,55 @@ data "terraform_remote_state" "albs" {
 }
 
 # BE Task Definition
+resource "aws_ecs_task_definition" "ECSTaskDefinition" {
+  family                   = var.BEServiceName
+  cpu                      = var.ContainerCpu
+  memory                   = var.ContainerMemory
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  execution_role_arn       = data.terraform_remote_state.base.outputs.ECSTaskExecutionRole
+  task_role_arn            = data.terraform_remote_state.albs.outputs.BETaskRole
+  container_definitions = jsonencode([
+    {
+      name   = var.BEServiceName
+      cpu    = var.ContainerCpu
+      memory = var.ContainerMemory
+      image  = var.ImageHash
+      healthCheck = {
+        startPeriod = 40
+        command = [
+          "CMD-SHELL",
+          "curl --fail http://localhost:${var.ContainerPort}/health || exit 1"
+        ]
+        interval = 40
+      }
+      portMappings = [
+        {
+          containerPort = var.ContainerPort
+        }
+      ]
+
+      environment = [
+        {
+          name  = "UserTableName"
+          value = data.terraform_remote_state.storage.outputs.UserTableName
+        },
+        {
+          name  = "SessionTableName"
+          value = data.terraform_remote_state.storage.outputs.SessionTableName
+        },
+        {
+          name  = "MenuTableName"
+          value = data.terraform_remote_state.storage.outputs.MenuTableName
+        },
+        {
+          name  = "OrdersTableArn"
+          value = data.terraform_remote_state.storage.outputs.OrdersTableArn
+        }
+
+      ]
+
+    }
+  ])
+
+}

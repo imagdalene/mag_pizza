@@ -80,9 +80,19 @@ output "UserTableArn" {
   value       = aws_dynamodb_table.User.arn
 }
 
+output "UserTableName" {
+  description = "UserTable Name"
+  value       = aws_dynamodb_table.User.id
+}
+
 output "SessionTableArn" {
   description = "SessionTable Arn"
   value       = aws_dynamodb_table.Session.arn
+}
+
+output "SessionTableName" {
+  description = "SessionTable Name"
+  value       = aws_dynamodb_table.Session.id
 }
 
 output "MenuTableArn" {
@@ -90,7 +100,17 @@ output "MenuTableArn" {
   value       = aws_dynamodb_table.Menu.arn
 }
 
+output "MenuTableName" {
+  description = "MenuTable Name"
+  value       = aws_dynamodb_table.Menu.id
+}
+
 output "OrdersTableArn" {
   description = "OrdersTable Arn"
   value       = aws_dynamodb_table.Orders.arn
+}
+
+output "OrdersTableName" {
+  description = "OrdersTable Name"
+  value       = aws_dynamodb_table.Orders.id
 }
