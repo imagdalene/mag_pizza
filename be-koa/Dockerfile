@@ -9,7 +9,7 @@ ONBUILD ENV NODE_ENV $NODE_ENV
 COPY . /tmp/workspace/Docker/be/
 
 RUN cd /tmp/workspace/Docker/be && npm install && npm cache clean --force
-RUN pwd && npm run build && ls 
+RUN pwd && ls && npm run build
 RUN cd /tmp/workspace/Docker/be && ls
 
 CMD ["npm","start"]
