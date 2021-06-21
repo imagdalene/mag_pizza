@@ -1,0 +1,28 @@
+{
+  "name": "be-koa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@godaddy/terminus": "^4.9.0",
+    "@koa/router": "^10.0.0",
+    "aws-sdk": "^2.931.0",
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "chalk": "^4.1.1",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compose": "^4.1.0",
+    "koa-ratelimit": "^5.0.0",
+    "koa-static": "^5.0.0",
+    "koa2-cors": "^2.0.6",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
