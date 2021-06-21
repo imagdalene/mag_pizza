@@ -10,9 +10,9 @@ import {
 
 import { logger } from "./middleware/logger";
 
-import config from './config'
+import config from "./config";
 
-const { awsRegion } = config
+const { awsRegion } = config;
 
 export async function GetAWSCredentials(): Promise<Credentials> {
   const providers = [() => new ECSCredentials()];
@@ -34,25 +34,27 @@ export async function GetDynamoDBClientInstance(): Promise<DynamoDB.DocumentClie
 }
 
 export async function CreateItem(params: DynamoDB.DocumentClient.PutItemInput) {
-  const client = await GetDynamoDBClientInstance()
+  const client = await GetDynamoDBClientInstance();
   return await client
-  .put(params)
-  .promise().then(
-    async (
-      result: PromiseResult<DynamoDB.DocumentClient.PutItemOutput, AWSError>
-    ) => {
-      if (result.$response.error) {
-        logger.error(result.$response.error);
-        throw result.$response.error;
-      }
+    .put(params)
+    .promise()
+    .then(
+      async (
+        result: PromiseResult<DynamoDB.DocumentClient.PutItemOutput, AWSError>
+      ) => {
+        if (result.$response.error) {
+          logger.error(result.$response.error);
+          throw result.$response.error;
+        }
 
-      return result.$response.data;
-    }
-    }
-  )
+        return result.$response.data;
+      }
+    );
 }
 
-export async function GetItem(params: DynamoDB.DocumentClient.GetItemInput) {
+export async function GetItem(
+  params: DynamoDB.DocumentClient.GetItemInput
+): Promise<unknown> {
   const client = await GetDynamoDBClientInstance();
   return await client
     .get(params)

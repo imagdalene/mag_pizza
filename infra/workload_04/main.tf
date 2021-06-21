@@ -39,6 +39,14 @@ data "terraform_remote_state" "albs" {
   }
 }
 
+
+data "terraform_remote_state" "ui" {
+  backend = "local"
+  config = {
+    path = "../ui_03/terraform.tfstate"
+  }
+}
+
 # BE Task Definition
 resource "aws_ecs_task_definition" "BEECSTaskDefinition" {
   family                   = var.BEServiceName
@@ -73,17 +81,18 @@ resource "aws_ecs_task_definition" "BEECSTaskDefinition" {
           name  = "UserTableName"
           value = data.terraform_remote_state.storage.outputs.UserTableName
         },
-        {
-          name  = "SessionTableName"
-          value = data.terraform_remote_state.storage.outputs.SessionTableName
-        },
+     
         {
           name  = "MenuTableName"
           value = data.terraform_remote_state.storage.outputs.MenuTableName
         },
         {
           name  = "OrdersTableArn"
-          value = data.terraform_remote_state.storage.outputs.OrdersTableArn
+          value = data.terraform_remote_state.storage.outputs.OrdersTableName
+        },
+        {
+          name = "ORIGIN"
+          value = data.terraform_remote_state.ui.outputs.FEOrigin
         }
 
       ]

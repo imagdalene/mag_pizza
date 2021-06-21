@@ -122,3 +122,8 @@ resource "aws_route53_record" "Route53A" {
     zone_id                = aws_cloudfront_distribution.UiDist.hosted_zone_id
   }
 }
+
+output "FEOrigin" {
+  description = "FE Origin for BE to CORS  with"
+  value       = var.Aliases[0]
+}

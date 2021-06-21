@@ -31,24 +31,6 @@ resource "aws_dynamodb_table" "User" {
   }
 }
 
-resource "aws_dynamodb_table" "Session" {
-  name           = "Session"
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 20
-  write_capacity = 20
-  hash_key       = "userEmail"
-
-  attribute {
-    name = "userEmail"
-    type = "S"
-  }
-
-  ttl {
-    attribute_name = "TimeToExist"
-    enabled        = true
-  }
-}
-
 resource "aws_dynamodb_table" "Menu" {
   name           = "Menu"
   billing_mode   = "PROVISIONED"
@@ -83,16 +65,6 @@ output "UserTableArn" {
 output "UserTableName" {
   description = "UserTable Name"
   value       = aws_dynamodb_table.User.id
-}
-
-output "SessionTableArn" {
-  description = "SessionTable Arn"
-  value       = aws_dynamodb_table.Session.arn
-}
-
-output "SessionTableName" {
-  description = "SessionTable Name"
-  value       = aws_dynamodb_table.Session.id
 }
 
 output "MenuTableArn" {

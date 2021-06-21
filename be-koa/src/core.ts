@@ -1,14 +1,14 @@
-import { DynamoDB } from "aws-sdk";
-
 import { Context } from "koa";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import { logger } from "./middleware/logger";
 
-import config from './config';
+import config from "./config";
 
-const { jwtTokenSecret } = config
+import { GetUserByEmail, UserInterface } from "./controllers/User";
+
+const { jwtTokenSecret } = config;
 
 if (!jwtTokenSecret) {
   console.log(
@@ -20,16 +20,6 @@ if (!jwtTokenSecret) {
 export interface ErrorInterface {
   status: 401;
   body: { error: string; details: string };
-}
-
-interface UserInterfaceSafe {
-  id: string;
-  passwordHash?: string;
-  accessToken: string;
-}
-
-interface UserInterfaceRaw extends UserInterfaceSafe {
-  passwordHash: string;
 }
 
 interface AssertBody {
@@ -54,24 +44,18 @@ export const unauthorizedError: ErrorInterface = {
   body: { error: "UNAUTHORIZED", details: "Invalid credentials" },
 };
 
-export const secret = Buffer.from(
-  jwtTokenSecret,
-  "base64"
-);
+export const secret = Buffer.from(jwtTokenSecret, "base64");
 
 export type UserID = string & { __brand: "UserID" };
 
 export async function authenticateLocal({
   email,
   password,
-}): Promise<[ErrorInterface, UserInterfaceSafe]> {
-  const userQueryParams: DynamoDB.DocumentClient.GetItemInput = {
-    TableName: 
-  }
-
-  if (result.rowCount === 1) {
+}): Promise<[ErrorInterface, Omit<UserInterface, "passwordHash">]> {
+  const userResult = await GetUserByEmail(email);
+  userResult;
+  if (userResult) {
     return new Promise((resolve, reject) => {
-      const userResult = result.rows[0] as UserInterfaceRaw;
       bcrypt.compare(
         password,
         userResult.passwordHash,
@@ -81,7 +65,7 @@ export async function authenticateLocal({
             // rejection results in 500 error which is correct
             reject([err, null]);
           } else if (result) {
-            userResult.accessToken = signSecret(userResult.id);
+            userResult.accessToken = signSecret(userResult.email);
             const { passwordHash, ...otherFields } = userResult;
             logger.log({
               level: "info",
