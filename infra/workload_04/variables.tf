@@ -18,6 +18,11 @@ variable "ContainerPort" {
   default = 80
 }
 
+variable "ContainerPortStr" {
+  type    = string
+  default = "80"
+}
+
 variable "ContainerCpu" {
   type    = number
   default = 256
@@ -31,4 +36,14 @@ variable "ContainerMemory" {
 variable "DesiredCount" {
   type    = number
   default = 2
+}
+
+variable "JWT_TOKEN_SIGNING_SECRET" {
+  type    = string
+  default = ""
+}
+
+variable "AWS_REGION" {
+  type    = string
+  default = "us-east-1"
 }

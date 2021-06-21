@@ -47,6 +47,8 @@ data "terraform_remote_state" "ui" {
   }
 }
 
+data "aws_region" "current" {}
+
 # BE Task Definition
 resource "aws_ecs_task_definition" "BEECSTaskDefinition" {
   family                   = var.BEServiceName
@@ -78,10 +80,31 @@ resource "aws_ecs_task_definition" "BEECSTaskDefinition" {
 
       environment = [
         {
+          name  = "ORIGIN"
+          value = data.terraform_remote_state.ui.outputs.FEOrigin
+        },
+        {
+          name  = "JWT_TOKEN_SIGNING_SECRET"
+          value = var.JWT_TOKEN_SIGNING_SECRET
+        },
+        {
+          name  = "AWS_REGION"
+          value = var.AWS_REGION
+        },
+        {
+          name  = "PORT"
+          value = var.ContainerPortStr
+        },
+        {
+          name  = "LISTEN_ADDRESS"
+          value = data.terraform_remote_state.albs.outputs.BEAddress
+        },
+
+        {
           name  = "UserTableName"
           value = data.terraform_remote_state.storage.outputs.UserTableName
         },
-     
+
         {
           name  = "MenuTableName"
           value = data.terraform_remote_state.storage.outputs.MenuTableName
@@ -90,13 +113,17 @@ resource "aws_ecs_task_definition" "BEECSTaskDefinition" {
           name  = "OrdersTableArn"
           value = data.terraform_remote_state.storage.outputs.OrdersTableName
         },
-        {
-          name = "ORIGIN"
-          value = data.terraform_remote_state.ui.outputs.FEOrigin
-        }
 
       ]
 
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = data.terraform_remote_state.albs.outputs.LogGroup
+          "awslogs-region"        = data.aws_region.current.name
+          "awslogs-stream-prefix" = "BE Service"
+        }
+      }
     }
   ])
 

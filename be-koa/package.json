@@ -40,13 +40,13 @@
     "typescript": "^4.3.4"
   },
   "scripts": {
-    "logindocker": "echo $REPO_URL ; aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPO_URL",
-    "dockerize": "SHA=$(git rev-parse --short HEAD); docker build -t $REPO_URL:$SHA .",
     "build": "tsc -b ./src/",
-    "push": "echo 'Should login docker, get the image hash and push as be-hash to $REPO_URL",
     "dev": "nodemon --exec 'ts-node -r ./src/boot.ts'",
     "start": "node -r ./dist/boot.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:build": "SHA=$(git rev-parse --short HEAD); docker build -t $REPO_URL:$SHA .",
+    "docker:push": "SHA=$(git rev-parse --short HEAD); npm run docker:login && docker push $REPO_URL:$SHA",
+    "docker:login": "echo $REPO_URL ; aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPO_URL",
     "docker:local": "SHA=$(git rev-parse --short HEAD); docker run -p 8080:8080 $REPO_URL:$SHA"
   },
   "keywords": [],
