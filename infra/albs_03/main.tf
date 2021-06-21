@@ -151,7 +151,19 @@ resource "aws_iam_role" "BETaskRole" {
       Version = "2012-10-17"
       Statement = [
         {
-          Action = ["dynamodb:*"]
+          Action = [
+            "dynamodb:BatchGetItem",
+            "dynamodb:BatchWriteItem",
+            "dynamodb:ConditionCheckItem",
+            "dynamodb:DeleteItem",
+            "dynamodb:DescribeTable",
+            "dynamodb:GetItem",
+            "dynamodb:GetRecords",
+            "dynamodb:PutItem",
+            "dynamodb:Query",
+            "dynamodb:Scan",
+            "dynamodb:UpdateItem"
+            ]
           Effect = "Allow"
           Resource = [
             data.terraform_remote_state.storage.outputs.UserTableArn,
@@ -160,7 +172,12 @@ resource "aws_iam_role" "BETaskRole" {
           ]
         },
         {
-          Action   = ["logs:*"]
+          Action   = [
+            "logs:CreateLogStream", 
+            "logs:CreateLogGroup", 
+            "logs:DescribeLogStreams",
+            "logs:PutLogEvents"
+            ]
           Effect   = "Allow"
           Resource = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*:*"
         }

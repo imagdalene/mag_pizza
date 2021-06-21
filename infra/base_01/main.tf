@@ -20,6 +20,57 @@ data "aws_availability_zones" "available" {
 
 resource "aws_vpc" "Vpc" {
   cidr_block = var.vpcCidr
+  enable_dns_support = true
+  enable_dns_hostnames = true
+}
+
+resource "aws_iam_role" "VpcFlowLogRole" {
+  name = "VpcFlowLogRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "vpc-flow-logs.amazonaws.com"
+        }
+      },
+    ]
+  })
+
+  inline_policy {
+    name = "vpc-flowlog-role"
+    
+    policy = jsonencode({
+      Statement = [
+        {
+          Action = [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "logs:DescribeLogGroups",
+            "logs:DescribeLogStreams"
+          ]
+          Effect = "Allow"
+          Resource = "*"
+        }
+      ]
+    })
+  }
+}
+
+resource "aws_cloudwatch_log_group" "VpcLogGroup" {
+  name = "VpcLogGroup"
+  retention_in_days = 5
+}
+
+resource "aws_flow_log" "VpcFlowLog" {
+  iam_role_arn = aws_iam_role.VpcFlowLogRole.arn 
+  log_destination =  aws_cloudwatch_log_group.VpcLogGroup.arn
+  vpc_id = aws_vpc.Vpc.id
+  traffic_type = "ALL"
 }
 
 resource "aws_subnet" "PubSn1" {
@@ -104,7 +155,7 @@ resource "aws_eip" "EIP1" {
 
 resource "aws_nat_gateway" "NAT" {
   allocation_id = aws_eip.EIP1.id
-  subnet_id     = aws_subnet.PteSn1.id
+  subnet_id     = aws_subnet.PubSn1.id
   depends_on = [
     aws_eip.EIP1
   ]

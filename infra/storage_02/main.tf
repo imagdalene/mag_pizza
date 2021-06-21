@@ -25,10 +25,6 @@ resource "aws_dynamodb_table" "User" {
     type = "S"
   }
 
-  ttl {
-    attribute_name = "TimeToExist"
-    enabled        = false
-  }
 }
 
 resource "aws_dynamodb_table" "Menu" {

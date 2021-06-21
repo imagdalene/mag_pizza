@@ -16,4 +16,4 @@ then `aws s3 cp build s3://<bucketname> --recursive`. That will dump the ui pack
 1. Don't forget to `export REPO_URL=<your ecr url>`
 1. Then run `npm run docker:build`
 1. Then run `npm run docker:push`. The image is now in ECR
-1. **Now** rollout the workload infra (workload_04) with `SHA=$(git rev-parse --short HEAD) ; tf apply -auto-approve -var "ImageHash=$REPO_URL/$SHA"` . Super crude but it works
+1. **Now** rollout the workload infra (workload_04) with `SHA=$(git rev-parse --short HEAD) ; tf apply -auto-approve -var "ImageHash=$REPO_URL:$SHA"` . Super crude but it works
