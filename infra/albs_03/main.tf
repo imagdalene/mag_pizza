@@ -71,7 +71,8 @@ resource "aws_security_group_rule" "BEALBEgress" {
   protocol                 = "tcp"
   type                     = "egress"
   security_group_id        = aws_security_group.BackendALBSG.id
-  self = true
+  # self = true
+  cidr_blocks = ["0.0.0.0/0"]
   # source_security_group_id = aws_security_group.BEWorkloadSG.id
 }
 
