@@ -145,7 +145,7 @@ resource "aws_ecs_service" "BEService" {
   }
 
   network_configuration {
-    assign_public_ip = false
+    assign_public_ip = true
     subnets = [
       data.terraform_remote_state.base.outputs.PteSn1,
       data.terraform_remote_state.base.outputs.PteSn2

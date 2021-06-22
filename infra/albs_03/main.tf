@@ -55,9 +55,9 @@ resource "aws_security_group" "BEWorkloadSG" {
   vpc_id = data.terraform_remote_state.base.outputs.VpcId
 }
 
-resource "aws_security_group_rule" "PteALBWorkloadIngress" {
+resource "aws_security_group_rule" "BEALBToWorkloadRule" {
   from_port                = 0
-  to_port                  = 0
+  to_port                  = 65535
   protocol                 = -1
   type                     = "ingress"
   source_security_group_id = aws_security_group.BackendALBSG.id
@@ -67,16 +67,17 @@ resource "aws_security_group_rule" "PteALBWorkloadIngress" {
 
 resource "aws_security_group_rule" "BEALBEgress" {
   from_port                = 0
-  to_port                  = 0
-  protocol                 = -1
+  to_port                  = 65535
+  protocol                 = "tcp"
   type                     = "egress"
   security_group_id        = aws_security_group.BackendALBSG.id
-  source_security_group_id = aws_security_group.BEWorkloadSG.id
+  self = true
+  # source_security_group_id = aws_security_group.BEWorkloadSG.id
 }
 
 resource "aws_security_group_rule" "BEToOPAWorkloadIngress" {
   from_port                = 0
-  to_port                  = 0
+  to_port                  = 65535
   protocol                 = -1
   type                     = "ingress"
   security_group_id        = data.terraform_remote_state.opa.outputs.OPAActualWLSG

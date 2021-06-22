@@ -143,7 +143,9 @@ resource "aws_route_table_association" "PublicSubnetAssn2" {
 
 resource "aws_eip" "EIP1" {
   vpc = true
-
+  depends_on = [
+    aws_internet_gateway.IGW
+  ]
 }
 
 # resource "aws_eip" "EIP2" {
