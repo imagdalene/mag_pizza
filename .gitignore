@@ -2,3 +2,4 @@
 .terraform
 node_modules
 dist
+opa-policy/opa

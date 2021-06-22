@@ -1,0 +1,20 @@
+graph TD;
+  
+  id0 --> id1
+
+  id1 --> id2
+  id3 --> id2
+  id5 --> id3
+  subgraph public-subnets
+    id0(UI workload)
+  end
+  
+  subgraph private-subnets
+    id1(Application BE)
+    id2(OPA Server)
+    id3(Policy Server - tarball)
+  end
+
+  subgraph ci-system
+    id5(Policy Pipeline push)
+  
